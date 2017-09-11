@@ -59,9 +59,9 @@ public class Model {
         while (position < file.length()-1)  //XYN знает почему -1
         {
             ArrayList<Integer> temp = new ArrayList<>();
-            for (position = position +1; (file.charAt(position+1)!='\n'); position++)
+            for (position = position +1; (file.charAt(position+1)!='\n'); position=position+2)
             {
-                temp.add(Character.getNumericValue(file.charAt(position)));
+                temp.add(10*Character.getNumericValue(file.charAt(position))+Character.getNumericValue(file.charAt(position+1)));
             }
             cor_combinations.add(temp);
             position++;
