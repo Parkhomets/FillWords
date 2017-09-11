@@ -1,4 +1,10 @@
 package Game;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Model {
@@ -8,39 +14,7 @@ public class Model {
     ArrayList<Integer> som = new ArrayList<>();
     ArrayList<Integer> mir = new ArrayList<>();
 
-    public void createMap(){
-        kot.add(1);
-        kot.add(2);
-        kot.add(5);
 
-        som.add(3);
-        som.add(6);
-        som.add(9);
-
-        mir.add(4);
-        mir.add(7);
-        mir.add(8);
-
-        ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
-        temp.add(kot);
-        temp.add(som);
-        temp.add(mir);
-
-        int k = 3;
-
-        ArrayList<String> alph = new ArrayList<>();
-        alph.add("К");
-        alph.add("О");
-        alph.add("С");
-        alph.add("М");
-        alph.add("Т");
-        alph.add("О");
-        alph.add("И");
-        alph.add("Р");
-        alph.add("М");
-
-        simpleMap = new Map(k, temp, alph);
-    }
 
     public int check(ArrayList<Integer> current_nums, Map map){
         ArrayList<ArrayList<Integer>> wordsInOurMap = map.getMap();
@@ -50,4 +24,48 @@ public class Model {
         return 0;
     }
 
+
+    public void loadMap(){
+        StringBuffer file = new StringBuffer();
+        File fileDir = new File("C:\\Users\\Samsung\\IdeaProjects\\DreamTeamGame\\src\\Game\\1.txt");
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileDir), "UTF8")))
+        //try(FileInputStream fin=new FileInputStream("C:\\Users\\Samsung\\IdeaProjects\\DreamTeamGame\\src\\Game\\1.txt"))
+        {
+            int i=-1;
+            while((i=in.read())!=-1){
+
+                file.append((char)i);
+            }
+        }
+        catch(IOException ex){
+
+            System.out.println(ex.getMessage());
+        }
+        //System.out.println(file);
+        int position;
+        for (position = 0; file.charAt(position)!='\n'; position++) {
+        }
+        char[] fieldsize = new char[position];
+        file.getChars(0, position, fieldsize, 0);
+        int size = Character.getNumericValue(fieldsize[0]);
+        ArrayList<String> letters = new ArrayList<>();
+        for (position = position+1; file.charAt(position)!='\n'; position++)
+        {
+            letters.add(String.valueOf(file.charAt(position)));
+        }
+        //for (int i = 0; i< letters.size(); i++)
+            //System.out.println(letters.get(i));
+        ArrayList<ArrayList<Integer>> cor_combinations = new ArrayList<>();
+        while (position < file.length()-1)  //XYN знает почему -1
+        {
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (position = position +1; (file.charAt(position+1)!='\n'); position++)
+            {
+                temp.add(Character.getNumericValue(file.charAt(position)));
+            }
+            cor_combinations.add(temp);
+            position++;
+        }
+        simpleMap = new Map(size, cor_combinations, letters, this);
+    }
 }

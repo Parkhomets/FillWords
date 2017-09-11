@@ -18,12 +18,12 @@ public class View3 {
         this.map = map;
         int size = map.getSize();
         for (int i = 0; i < size * size; i++) {
-            buttons.get(i).setText(map.getAlph().get(i));
+            buttons.get(i).setText(map.getLetters().get(i));
         }
     }
 
-    public void go(Model M) {
-        MouseListener mL = new View3.Listener(map, M);
+    public void go() {
+        MouseListener mL = new View3.Listener(map);
         theFrame = new JFrame("FillWord by CoolTeam");
         theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel background = new JPanel(new BorderLayout());
@@ -57,29 +57,27 @@ public class View3 {
         Map map;
         ArrayList<Integer> current_b_nums = new ArrayList<>();  //массив для выделенных кнопок
         ArrayList<Integer> blocked_b_nums = new ArrayList<>();  //для заблокированных
-        Model M;
 
-        Listener(Map m, Model model){
+        Listener(Map m){
             click = 0;
             X = 0;
             Y = 0;
             map = m;
-            M = model;
         }
 
         public void mouseEntered(MouseEvent e) {
             //курсор мыши вошел в область наблюдаемого объекта
             if (click==1)
             {
-                int newX, newY;    //не всегда нужно - внести в if
-                JButton button = (JButton)e.getSource();   //не всегда нужно - внести в if
+                int newX, newY;
+                JButton button = (JButton)e.getSource();
                 int n = 0;
                 for (int i = 0; button != buttons.get(i); i++)
                     n = i+1;
                 if (blocked_b_nums.contains(n + 1)) {   //если кнопка заблочена, то выпрыгиваем
                     return;
                 }
-                newX = n% map.getSize()+1;            //дублирование, надо убрать   //не всегда нужно внести в if
+                newX = n%map.getSize()+1;            //дублирование, надо убрать   //не всегда нужно внести в if
                 newY = n/map.getSize()+1;           //не всегда нужно внести в if
                 if (current_b_nums.contains(n+1))
                 {
@@ -144,7 +142,7 @@ public class View3 {
             //находится над наблюдаемым объектом
             //for (Integer x : current_b_nums){ System.out.println(x);}
             int answer = 0;
-            answer = M.check(current_b_nums, map);
+            answer = map.gatModel().check(current_b_nums, map);
             Random rand = new Random();
             click = 0;
             if (answer == 1)
